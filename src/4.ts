@@ -3,7 +3,7 @@ class Key {
     this.signature = Math.round(Math.random());
   }
 
-  getSignature() {
+  public getSignature(): number {
     return this.signature;
   }
 }
@@ -13,20 +13,19 @@ class Person {
     this.key = key;
   }
 
-  getKey() {
-    return this.key;
+  public getKey(): number {
+    return this.key.getSignature();
   }
 }
 
 abstract class House {
-  constructor(
-    protected door: boolean,
-    protected key: Key,
-    private tenants: Person[] = []
-  ) {
+  protected door: boolean;
+  protected key: Key;
+  protected tenants: Person[] = [];
+
+  constructor(door: boolean, key: Key) {
     this.door = door;
     this.key = key;
-    this.tenants = tenants;
   }
 
   public comeIn(person: Person) {
@@ -42,83 +41,28 @@ abstract class House {
 }
 
 class MyHouse extends House {
-  constructor(key, door = false) {
+  constructor(key: Key, door: boolean) {
     super(door, key);
   }
 
-  public openDoor(key): void {
+  public openDoor(key: Key): void {
     if (key.getSignature() === this.key.getSignature()) {
+      this.door = true;
       console.log("door is open");
     } else {
-      console.log("door is closed");
+      console.log("key is wrong");
     }
   }
 }
 
 const key = new Key(0);
 
-const house = new MyHouse(key);
+const myhouse = new MyHouse(key, false);
 
-const person = new Person(key);
+const person = new Person(Jonh);
 
-house.openDoor(person.getKey());
+myhouse.openDoor(person.getKey());
 
-house.comeIn(person);
+myhouse.comeIn(person);
 
 export {};
-
-// class Team {
-//   members: Programmer[];
-//   constructor(members: Programmer[]) {
-//     this.members = members;
-//   }
-//   startProject() {
-//     this.members.forEach((member) => member.code());
-//   }
-// }
-// class Programmer {
-//   code() {
-//     console.log("Coding...");
-//   }
-// }
-// const programmers = [new Programmer(), new Programmer()];
-// const team = new Team(programmers);
-// team.startProject();
-
-// class Computer {
-//   processor: Processor;
-//   constructor() {
-//     this.processor = new Processor();
-//   }
-//   start() {
-//     this.processor.processData();
-//   }
-// }
-// class Processor {
-//   processData() {
-//     console.log("Processing data...");
-//   }
-// }
-// const computer = new Computer();
-// computer.start();
-
-// class Car {
-//   driver: Driver | null = null;
-//   setDriver(driver: Driver) {
-//     this.driver = driver;
-//   }
-//   startJourney() {
-//     if (this.driver) {
-//       this.driver.drive();
-//     }
-//   }
-// }
-// class Driver {
-//   drive() {
-//     console.log("Driving...");
-//   }
-// }
-// const driver = new Driver();
-// const car = new Car();
-// car.setDriver(driver);
-// car.startJourney();
